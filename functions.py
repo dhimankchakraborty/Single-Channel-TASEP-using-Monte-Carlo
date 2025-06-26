@@ -90,4 +90,23 @@ def simulation_random_update(mc_step_no, L, state, alpha, beta):
     return total_no_density * 10 / mc_step_no, site_av_no_density_arr * 10 / mc_step_no, av_current / mc_step_no
 
 
+@njit
+def density_current_calculation(therm_step_no, mc_step_no, L, parameters_arr, initial_filling_factor):
+    total_no_density_arr = np.zeros((len(parameters_arr)))
+    av_current_arr = np.zeros((len(parameters_arr)))
+
+    for i, parameters in enumerate(parameters_arr):
+        alpha = parameters[0]
+        beta = parameters[1]
+
+        state = initial_state_generator(L, initial_filling_factor)
+
+        state = thermalization_random_update(therm_step_no, L, state, alpha, beta)
+
+        total_no_density_arr[i], _, av_current_arr[i] = simulation_random_update(mc_step_no, L, state, alpha, beta)
+
+        print(f"Run {i+1}")
+    
+    return total_no_density_arr, av_current_arr
+
 

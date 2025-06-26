@@ -1,16 +1,15 @@
 import numpy as np
-import numpy.random as rn
 import matplotlib.pyplot as plt
 from functions import *
 
 
 L = 500
 initial_filling_factor = 0.1
-alpha = 0.8
+alpha = 0.2
 beta = 0.6
 
-mc_step_no = 500000
-therm_step_no = mc_step_no
+mc_step_no = 50000
+therm_step_no = 5000
 steps_skip = 10
 
 
