@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from numba import jit, njit, prange
 
 
+@njit
 def initial_state_generator(L, initial_filling):
     state = np.zeros((L), dtype=np.uint8)
 
@@ -12,7 +13,7 @@ def initial_state_generator(L, initial_filling):
     filled_sites_arr = np.arange(0, L)
     rn.shuffle(filled_sites_arr)
 
-    for i in range(filled_sites):
+    for i in prange(filled_sites):
         state[filled_sites_arr[i]] = 1
     
     return state
@@ -49,7 +50,7 @@ def thermalization_random_update(therm_step_no, L, state, alpha, beta):
         
         # print(f'{i + 1} ---- {state} ---- {state.mean()}')
 
-        return state
+    return state
 
 
 @njit

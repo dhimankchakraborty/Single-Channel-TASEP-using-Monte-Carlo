@@ -6,7 +6,7 @@ from functions import *
 
 L = 500
 initial_filling_factor = 0.1
-alpha = 0.4
+alpha = 0.2
 beta = 0.7
 
 mc_step_no = 500000
@@ -19,7 +19,7 @@ state = thermalization_random_update(therm_step_no, L, state, alpha, beta)
 
 total_no_density, site_av_no_density_arr = simulation_random_update(mc_step_no, L, state, alpha, beta)
 
-site_pos = np.arange(0, L) / L
+site_pos = np.arange(0, L)
 
 plt.plot(site_pos, site_av_no_density_arr, label=f"Average Particle Density: {np.around(total_no_density, decimals=3)}")
 plt.ylim(0, 1)
