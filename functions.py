@@ -21,8 +21,8 @@ def initial_state_generator(L, initial_filling):
 
 @njit
 def thermalization_random_update(therm_step_no, L, state, alpha, beta):
-    for i in range(therm_step_no):
-        for j in range(L):
+    for i in prange(therm_step_no):
+        for j in prange(L):
             selected_site = rn.randint(L)
 
             if selected_site == 0:
@@ -54,12 +54,14 @@ def thermalization_random_update(therm_step_no, L, state, alpha, beta):
 
 
 @njit
-def simulation_random_update(mc_step_no, L, state, alpha, beta):
+def simulation_random_update(mc_step_no, L, state, alpha, beta, current_mes_site):
     total_no_density = 0
     site_av_no_density_arr = np.zeros((L))
 
-    for i in range(mc_step_no):
-        for j in range(L):
+    av_current = 0
+
+    for i in prange(mc_step_no):
+        for j in prange(L):
             selected_site = rn.randint(L)
 
             if selected_site == 0:
@@ -84,13 +86,15 @@ def simulation_random_update(mc_step_no, L, state, alpha, beta):
 
                     state[selected_site] = 0
                     state[selected_site + 1] = 1
+
+                    if selected_site == current_mes_site:
+                        av_current += 1
         
-        # print(f'{i + 1} ---- {state} ---- {state.mean()}')
         if (i + 1) % 10 == 0:
             total_no_density += state.mean()
             site_av_no_density_arr += state
 
-    return total_no_density * 10 / mc_step_no, site_av_no_density_arr * 10 / mc_step_no
+    return total_no_density * 10 / mc_step_no, site_av_no_density_arr * 10 / mc_step_no, av_current / mc_step_no
 
 
 
